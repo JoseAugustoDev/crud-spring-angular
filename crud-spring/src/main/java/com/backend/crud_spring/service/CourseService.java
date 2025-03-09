@@ -1,12 +1,12 @@
 package com.backend.crud_spring.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.backend.crud_spring.exception.RecordNotFoundException;
 import com.backend.crud_spring.model.Course;
 import com.backend.crud_spring.repository.CourseRepository;
 
@@ -27,9 +27,10 @@ public class CourseService {
           return courseRepository.findAll();
      }
 
-     public Optional<Course> findById(@PathVariable @NotNull @Positive Long id) {
+     public Course findById(@PathVariable @NotNull @Positive Long id) {
 
-          return courseRepository.findById(id);
+          return courseRepository.findById(id)
+          .orElseThrow(() -> new RecordNotFoundException(id));
 
      }
 
@@ -37,22 +38,20 @@ public class CourseService {
           return courseRepository.save(course);
      }
 
-     public Optional<Course> update(Course course, Long id) {
+     public Course update(Course course, Long id) {
           return courseRepository.findById(id)
-               .map(record -> {
-                    record.setName(course.getName());
-                    record.setCategory(course.getCategory());
+                    .map(record -> {
+                         record.setName(course.getName());
+                         record.setCategory(course.getCategory());
 
-                    return courseRepository.save(record);
-               });
+                         return courseRepository.save(record);
+                    }).orElseThrow(() -> new RecordNotFoundException(id));
      }
 
-     public boolean delete(@PathVariable @NotNull @Positive Long id) {
-          return courseRepository.findById(id)
-                    .map(_ -> {
-                         courseRepository.deleteById(id);
-                         return true;
-                    })
-                    .orElse(false);
+     public void delete(@PathVariable @NotNull @Positive Long id) {
+
+          courseRepository.delete(courseRepository.findById(id)
+          .orElseThrow(() -> new RecordNotFoundException(id)));
+
      }
 }
