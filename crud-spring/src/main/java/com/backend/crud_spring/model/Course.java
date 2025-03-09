@@ -1,5 +1,7 @@
 package com.backend.crud_spring.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Column;
@@ -13,6 +15,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
+@SQLDelete(sql = "UPDATE Course SET status = 'Inativo' WHERE id = ?")
+@SQLRestriction("status<> 'Inativo'")
 @Entity
 public class Course {
 
@@ -31,4 +35,10 @@ public class Course {
      @Column(length = 10, nullable = false)
      @Length(max = 10)
      private String category;
+
+     @NotNull
+     @Pattern(regexp = "Ativo|Inativo")
+     @Column(length = 10, nullable = false)
+     @Length(max = 10)
+     private String status = "Ativo";
 }
