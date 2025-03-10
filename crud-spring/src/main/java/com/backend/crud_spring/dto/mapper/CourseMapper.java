@@ -10,7 +10,9 @@ import com.backend.crud_spring.model.Course;
 @Component
 public class CourseMapper {
      public CourseDTO toDTO(Course course) {
-          return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
+          return new CourseDTO(
+               course.getId(), course.getName(), course.getCategory().getValue(), course.getLessons()
+          );
      }
 
      public Course toEntity(CourseDTO courseDTO) {
