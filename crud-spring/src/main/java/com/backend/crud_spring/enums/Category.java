@@ -1,7 +1,7 @@
 package com.backend.crud_spring.enums;
 
 public enum Category {
-     BACKEND("Back-end"), FRONTEND("Front-end");
+     BACKEND("Back-End"), FRONTEND("Front-End");
      
      private String value;
 
