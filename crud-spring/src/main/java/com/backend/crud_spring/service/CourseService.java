@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.backend.crud_spring.dto.CourseDTO;
 import com.backend.crud_spring.dto.mapper.CourseMapper;
 import com.backend.crud_spring.exception.RecordNotFoundException;
+import com.backend.crud_spring.model.Course;
 import com.backend.crud_spring.repository.CourseRepository;
 
 import jakarta.validation.Valid;
@@ -46,13 +47,15 @@ public class CourseService {
           return courseMapper.toDTO(courseRepository.save(courseMapper.toEntity(course)));
      }
 
-     public CourseDTO update(CourseDTO course, Long id) {
+     public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO courseDTO) {
           return courseRepository.findById(id)
-                    .map(record -> {
-                         record.setName(course.name());
-                         record.setCategory(courseMapper.converCategoryValue(course.category()));
-
-                         return courseMapper.toDTO(courseRepository.save(record));
+                    .map(recordFound -> {
+                         Course course = courseMapper.toEntity(courseDTO);
+                         recordFound.setName(courseDTO.name());
+                         recordFound.setCategory(courseMapper.convertCategoryValue(courseDTO.category()));
+                         recordFound.getLessons().clear();
+                         course.getLessons().forEach(recordFound.getLessons()::add);
+                         return courseMapper.toDTO(courseRepository.save(recordFound));
                     }).orElseThrow(() -> new RecordNotFoundException(id));
      }
 

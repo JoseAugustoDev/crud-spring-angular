@@ -52,7 +52,7 @@ public class CourseController {
 
      @PutMapping("/{id}")
      public CourseDTO update(@RequestBody @Valid @NotNull CourseDTO course, @PathVariable @NotNull @Positive Long id) {
-          return courseService.update(course, id);
+          return courseService.update(id, course);
      }
 
      @DeleteMapping("/{id}")
