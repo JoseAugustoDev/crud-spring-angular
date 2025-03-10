@@ -1,10 +1,12 @@
 package com.backend.crud_spring;
 
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.backend.crud_spring.enums.Category;
 import com.backend.crud_spring.model.Course;
 import com.backend.crud_spring.repository.CourseRepository;
 
@@ -22,7 +24,7 @@ public class CrudSpringApplication {
 
 			Course curso = new Course();
 			curso.setName("Angular + Spring");
-			curso.setCategory("Front-end");
+			curso.setCategory(Category.FRONTEND);
 
 			courseRepository.save(curso);
 		};

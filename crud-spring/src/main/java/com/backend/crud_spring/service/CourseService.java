@@ -50,13 +50,13 @@ public class CourseService {
           return courseRepository.findById(id)
                     .map(record -> {
                          record.setName(course.name());
-                         record.setCategory(course.category());
+                         record.setCategory(courseMapper.converCategoryValue(course.category()));
 
                          return courseMapper.toDTO(courseRepository.save(record));
                     }).orElseThrow(() -> new RecordNotFoundException(id));
      }
 
-     public void delete(@PathVariable @NotNull @Positive Long id) {
+     public void delete(@NotNull @Positive Long id) {
 
           courseRepository.delete(courseRepository.findById(id)
                     .orElseThrow(() -> new RecordNotFoundException(id)));
